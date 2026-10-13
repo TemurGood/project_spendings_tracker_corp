@@ -3,7 +3,7 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/db";
-import { stores, budgetAllocations, users } from "@/db/schema";
+import { stores, budgetAllocations } from "@/db/schema";
 import { revalidatePath } from "next/cache";
 
 // Проверка прав администратора
@@ -16,7 +16,7 @@ async function ensureAdmin() {
 }
 
 // 1. Создание нового магазина
-export async function createStore(formData: FormData) {
+export async function createStore(formData: FormData): Promise<void> {
   await ensureAdmin();
 
   const name = formData.get("name") as string;
@@ -38,11 +38,10 @@ export async function createStore(formData: FormData) {
 
   revalidatePath("/admin/stores");
   revalidatePath("/admin/dashboard");
-  return { success: true };
 }
 
 // 2. Назначение бюджета филиалу
-export async function allocateBudget(formData: FormData) {
+export async function allocateBudget(formData: FormData): Promise<void> {
   await ensureAdmin();
 
   const storeId = formData.get("storeId") as string;
@@ -63,5 +62,4 @@ export async function allocateBudget(formData: FormData) {
   });
 
   revalidatePath("/admin/dashboard");
-  return { success: true };
 }

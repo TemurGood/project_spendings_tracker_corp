@@ -15,7 +15,7 @@ async function getStoreManagerSession() {
 }
 
 // Добавление выручки
-export async function addRevenue(formData: FormData) {
+export async function addRevenue(formData: FormData): Promise<void> {
   const user = await getStoreManagerSession();
 
   const amount = parseFloat(formData.get("amount") as string);
@@ -40,11 +40,10 @@ export async function addRevenue(formData: FormData) {
 
   revalidatePath("/store/dashboard");
   revalidatePath("/store/competition");
-  return { success: true };
 }
 
-// Добавление расхода (Строго для своего магазина)
-export async function addExpense(formData: FormData) {
+// Добавление расхода
+export async function addExpense(formData: FormData): Promise<void> {
   const user = await getStoreManagerSession();
 
   const amount = parseFloat(formData.get("amount") as string);
@@ -68,5 +67,4 @@ export async function addExpense(formData: FormData) {
   });
 
   revalidatePath("/store/dashboard");
-  return { success: true };
 }
